@@ -1,0 +1,8 @@
+{
+  "name": "@devdraw/shared",
+  "version": "0.0.0",
+  "type": "module",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" }
+}
