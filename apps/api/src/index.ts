@@ -1,13 +1,7 @@
-import { greet, type User } from "@devdraw/shared";
+import app  from "./app";
 
-Bun.serve({
-  port: 3001,
-  routes: {
-    "/api/hello": () => {
-      const user: User = { id: "1", name: "Arpan" };
-      return Response.json({ message: greet(user.name) });
-    },
-  },
-});
+const port = Number(process.env.PORT ?? 3001)
 
-console.log("API on http://localhost:3001");
+app.listen(port,() => {
+  console.log(`Devdraw API listening on http://localhost:${port}`)
+})
