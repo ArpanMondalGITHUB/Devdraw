@@ -1,27 +1,34 @@
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
-import authrouter from "../src/routes/auth"
+import cookieParser from 'cookie-parser';
+import authRoutes from "./routes/auth.routess"
+import { config } from "./config/config";
+import { errorHandler } from "./middleware/auth.middleware";
+dotenv.config();
 
-dotenv.config()
+const app = express();
 
-const app = express()
 
+app.use(cookieParser());
+app.use(express.json());
 app.use(cors(
     {
-        origin: "http://localhost:5173/"
+        origin: config.corsOrigin,
+        credentials:true
     }
 ));
-app.use(express.json())
 
-app.use("/api",authrouter)
+
+app.use("/api/v1/auth",authRoutes);
 
 app.get('/',(req,res) => {
-  res.send("Devdraw API is running")
+  res.send("Devdraw API is running");
 });
 
-app.get('/api/health',(req,res) => {
-  res.json({status:"ok"})
+app.get('/api/v1/health',(req,res) => {
+  res.json({status:"ok"});
 });
 
+app.use(errorHandler);
 export default app;
