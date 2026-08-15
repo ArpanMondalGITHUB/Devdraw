@@ -7,7 +7,7 @@
     "start": "bun src/index.ts"
   },
   "dependencies": {
-    "@devdraw/prisma": "workspace:*",
+    "@devdraw/db": "workspace:*",
     "@devdraw/shared": "workspace:*",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
