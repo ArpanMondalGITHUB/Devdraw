@@ -36,8 +36,8 @@ export const errorHandler = (
   if (err instanceof ApiError) {
     return res.status(err.statusCode).json({ message: err.message });
   }
-  // Prisma unique-constraint violation → duplicate email race lost
-  if (typeof err === "object" && err !== null && (err as any).code === "P2002") {
+  // pg unique-constraint violation → duplicate email race lost
+  if (typeof err === "object" && err !== null && (err as any).code === "23505") {
     return res.status(409).json({ message: "Email already registered" });
   }
   console.error(err); // real logging: swap for pino when you need it

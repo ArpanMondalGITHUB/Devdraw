@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {signup,signin,logout,logoutall , refresh} from "../controllers/auth.controllers";
 import { requireAuth, validate } from "../middleware/auth.middleware";
-import { signinSchema, signupSchema } from "../schemas/auth.schemas";
+import { signinSchema, signupSchema } from "@devdraw/shared";
 const router = Router()
 
 router.route("/signup").post(validate(signupSchema), signup);
