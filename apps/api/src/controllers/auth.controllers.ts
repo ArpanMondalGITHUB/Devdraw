@@ -6,6 +6,9 @@ import {
   createUser,
   deleteRefreshToken,
   deleteAllRefreshTokens,
+  findUserById,
+  updateUser,
+  deleteUser,
 } from "@devdraw/db";
 import { issueTokens } from "../services/auth.services";
 import { config } from "../config/config";
@@ -66,3 +69,50 @@ export const logoutall = async (req: Request, res: Response) => {
   res.clearCookie("refreshToken", { path: "/api/v1/auth" });
   res.json({ message: "Logged out everywhere" });
 };
+
+export const getMe = async (req:Request, res:Response) => {
+  const user = await findUserById((req as any).userId);
+  if(!user) throw new ApiError(404, "User not found");
+
+  const { password: _, ...safeUser } = user;
+
+  res.json({ user: safeUser });
+};
+
+export const updateMe = async (req:Request, res:Response) => {
+  const {name, email} = req.body;
+
+  const user = await updateUser((req as any).userId,{name,email});
+  if (!user) throw new ApiError(404, "User not found");
+
+  const { password: _, ...safeUser } = user;
+
+  res.json({user:safeUser})
+
+};
+
+export const patchMe = async (req:Request, res:Response) => {
+  const updates = req.body;
+
+  const user = await updateUser((req as any).userId,updates);
+  if (!user) throw new ApiError(404,"User not found");
+
+  const{ password:_, ...safeUser} = user;
+
+  res.json({user:safeUser})
+};
+
+export const deleteMe = async (req:Request, res:Response) => {
+  const {password} = req.body;
+
+  const userId = (req as any).userId;
+
+  const user = await findUserById(userId);
+  if(!user) throw new ApiError(404,"User not found");
+  if(!(await Bun.password.verify(password,user.password)))
+    throw new ApiError(401,"Incorrect password");
+  await deleteUser(userId);
+  res.clearCookie("refreshToken",{path:"/api/v1/auth"});
+  res.json({message:"Account deleted"});
+};
+

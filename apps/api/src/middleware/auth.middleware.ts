@@ -2,7 +2,7 @@ import type{ ZodType } from "zod";
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken"
 import {config} from "../config/config"
-
+import { rateLimit } from 'express-rate-limit';
 
 export class ApiError extends Error{
     constructor(public statusCode:number,message:string){
@@ -56,3 +56,42 @@ export const requireAuth = async(req:Request,res:Response , next:NextFunction) =
     throw new ApiError(401, "Invalid or expired token");
   }
 };
+
+// Configure the specific limiter for auth routes
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Strict limit for sign-in attempts
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  handler: (req: Request, res: Response) => {
+    res.status(429).json({ 
+      error: 'Too many sign-in attempts. Please try again in 15 minutes.' 
+    });
+  }
+});
+
+// DO NOT TOUCH THIS I AM KEEPING IT FOR MY KNOWLEDGE 
+
+// const store = new Map<string, { count: number; resetAt: number }>();
+
+// export const rateLimiter = (req: Request, res: Response, next: NextFunction) => {
+//   const ip = req.ip ?? "unknown";
+//   const now = Date.now();
+//   const window = 15 * 60 * 1000; // 15 min
+//   const limit = 10;
+
+//   let record = store.get(ip);
+
+//   if (!record || now > record.resetAt) {
+//     record = { count: 0, resetAt: now + window };
+//   }
+
+//   record.count++;
+//   store.set(ip, record);
+
+//   if (record.count > limit) {
+//     return res.status(429).json({ message: "Too many requests" });
+//   }
+
+//   next();
+// };

@@ -1,3 +1,5 @@
+import { emailSchema } from './../shared/src/schemas/auth.schemas';
+import { chownSync } from "node:fs";
 import { pool } from "./pool.ts";
 
 export interface User {
@@ -77,4 +79,36 @@ export const deleteRefreshToken = async (token: string): Promise<void> => {
 
 export const deleteAllRefreshTokens = async (userId: string): Promise<void> => {
   await pool.query(`DELETE FROM "RefreshToken" WHERE "userId" = $1`, [userId]);
+};
+
+export const updateUser = async (
+  id:string,
+  updates:{name?:string,email?:string }
+): Promise<User | null> => {
+  const fields = [];
+  const values = [];
+  let i = 1;
+
+  if (updates.name !== undefined) {
+    fields.push(`name = $${i+1}`);
+    values.push(updates.name);
+  }
+  if (updates.email !== undefined) {
+    fields.push(`email = $${i+1}`);
+    values.push(updates.email);
+  }
+
+  if(fields.length === 0) return findUserById(id);
+
+  values.push(id);
+  const {rows} = await pool.query<User>(
+    `UPDATE "User" SET ${fields.join(", ")}, "updatedAt" = now()
+    WHERE id = $${i} RETURNING *`,
+    values
+  );
+  return rows[0] ?? null;
+}
+
+export const deleteUser = async (id:string): Promise<void> => {
+  await pool.query(`DELETE FROM "User" WHERE ID = $1`,[id]);
 };
