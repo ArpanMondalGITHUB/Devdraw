@@ -33,9 +33,11 @@ export const signinSchema = z.object({
 // Profile forms
 export const updateMeSchema = z.object({
   name: nameSchema,
-  username: usernameSchema,
-  avatarUrl: z.url().max(500).nullable(),
-  bio: z.string().trim().max(300).nullable(),
+  email:emailSchema,
+  // Later we will add this in controllers
+  // username: usernameSchema,
+  // avatarUrl: z.url().max(500).nullable(),
+  // bio: z.string().trim().max(300).nullable(),
 });
 
 export const patchMeSchema = updateMeSchema.partial().refine(

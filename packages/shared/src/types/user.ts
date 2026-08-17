@@ -9,3 +9,8 @@ export interface AuthResponse {
   user: User;
   accessToken: string;
 }
+
+export interface ApiError {
+  status: number;
+  message: string;
+}
