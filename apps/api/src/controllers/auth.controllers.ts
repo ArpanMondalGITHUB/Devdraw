@@ -92,9 +92,9 @@ export const updateMe = async (req:Request, res:Response) => {
 };
 
 export const patchMe = async (req:Request, res:Response) => {
-  const updates = req.body;
+  const { name, email } = req.body; // only forward fields updateUser can persist
 
-  const user = await updateUser((req as any).userId,updates);
+  const user = await updateUser((req as any).userId, { name, email });
   if (!user) throw new ApiError(404,"User not found");
 
   const{ password:_, ...safeUser} = user;
