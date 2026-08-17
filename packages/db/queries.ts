@@ -1,5 +1,3 @@
-import { emailSchema } from './../shared/src/schemas/auth.schemas';
-import { chownSync } from "node:fs";
 import { pool } from "./pool.ts";
 
 export interface User {
@@ -90,11 +88,11 @@ export const updateUser = async (
   let i = 1;
 
   if (updates.name !== undefined) {
-    fields.push(`name = $${i+1}`);
+    fields.push(`name = $${i++}`);
     values.push(updates.name);
   }
   if (updates.email !== undefined) {
-    fields.push(`email = $${i+1}`);
+    fields.push(`email = $${i++}`);
     values.push(updates.email);
   }
 
