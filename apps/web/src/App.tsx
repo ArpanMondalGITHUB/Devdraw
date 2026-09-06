@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import { Auth } from "./pages/features/Auth";
-import { Home } from "./pages/features/Home";
-import { ProtectedRoute } from "./components/ProtectedRoutes";
+import { Auth } from "./pages/features/auth/Auth";
+import { Files } from "./pages/features/canvas/Files";
+import { ProtectedRoute } from "./lib/ProtectedRoutes";
 
 export default function App() {
 
@@ -9,7 +9,7 @@ export default function App() {
     <>
     <Routes>
       <Route path="/" element={<Auth/>}/>
-      <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>}/>
+      <Route path="/home" element={<ProtectedRoute><Files /></ProtectedRoute>}/>
     </Routes>
     </>
   );

@@ -9,6 +9,7 @@ export interface User {
   updatedAt: Date;
 }
 
+
 export interface RefreshToken {
   id: string;
   token: string;
@@ -110,3 +111,12 @@ export const updateUser = async (
 export const deleteUser = async (id:string): Promise<void> => {
   await pool.query(`DELETE FROM "User" WHERE ID = $1`,[id]);
 };
+
+export const createFile = async (userId:string,title:string) => {
+  const {rows} = await pool.query(
+    `INSERT INTO "File" ("userId",title) VALUES ($1,$2) RETURNING *`,
+    [userId,title]
+  );
+  return rows[0];
+}
+
