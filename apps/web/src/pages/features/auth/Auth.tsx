@@ -3,12 +3,12 @@ import AuthLayout, {
   Field,
   SocialRow,
   SubmitButton,
-} from "../../components/ui/AuthLayout";
+} from "../../../components/AuthLayout";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { signupSchema, signinSchema } from "@devdraw/shared";
 import {z} from "zod"
-import authApi from "../../api/auth.api";
-import { useAuth } from "../../context/auth.context";
+import authApi from "../../../api/auth.api";
+import { useAuth } from "../../../context/auth.context";
 
 export const Auth = () => {
   const [searchParams] = useSearchParams();

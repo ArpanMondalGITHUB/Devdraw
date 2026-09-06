@@ -34,7 +34,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 
 # md files
-TODO.md
-PROGRESS.md
-ARCHITECTURE.md
+# TODO.md
+# PROGRESS.md
+# ARCHITECTURE.md
 cookies.txt
